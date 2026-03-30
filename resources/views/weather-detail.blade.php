@@ -7,7 +7,7 @@
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
                         <h2 class="mb-1">
-                            <i class="fas fa-cloud-sun"></i> Detail Cuaca: {{ $data['location']['name'] ?? 'Kota Tidak Diketahui' }}
+                            <i class="fas fa-{{ $data['icon'] ?? 'cloud-sun' }}"></i> Detail Cuaca: {{ $data['location']['name'] ?? 'Kota Tidak Diketahui' }}
                         </h2>
                         <p class="text-muted mb-0">
                             <i class="fas fa-map-marker-alt"></i> {{ $data['province'] ?? ($data['location']['region'] ?? 'Provinsi Tidak Diketahui') }}, {{ $data['location']['country'] ?? 'Negara Tidak Diketahui' }}
@@ -34,11 +34,11 @@
                             <div class="col-md-6">
                                 <div class="d-flex align-items-center mb-3">
                                     <div class="weather-icon me-3">
-                                        <i class="fas fa-sun fa-3x text-warning"></i>
+                                        <i class="fas fa-{{ $data['icon'] ?? 'sun' }} fa-3x {{ isset($data['current']['is_day']) && $data['current']['is_day'] ? 'text-warning' : 'text-light' }}"></i>
                                     </div>
                                     <div>
                                         <h3 class="mb-0">{{ isset($data['current']['temp_c']) ? number_format($data['current']['temp_c'], 1) . '°C' : 'N/A' }}</h3>
-                                        <p class="text-muted mb-0">{{ $data['current']['condition']['text'] ?? 'Data tidak tersedia' }}</p>
+                                        <p class="text-muted mb-0">{{ $data['current']['condition']['text_id'] ?? $data['current']['condition']['text'] ?? 'Data tidak tersedia' }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -203,8 +203,8 @@
                                         <span class="min-temp">{{ isset($day['day']['mintemp_c']) ? number_format($day['day']['mintemp_c'], 0) : 'N/A' }}°</span>
                                     </div>
                                     <div class="forecast-condition">
-                                        <i class="fas fa-cloud"></i>
-                                        <span>{{ $day['day']['condition']['text'] ?? 'N/A' }}</span>
+                                        <i class="fas fa-{{ $day['day']['icon'] ?? 'cloud' }}"></i>
+                                        <span>{{ $day['day']['condition']['text_id'] ?? $day['day']['condition']['text'] ?? 'N/A' }}</span>
                                     </div>
                                     <div class="forecast-details">
                                         <small>

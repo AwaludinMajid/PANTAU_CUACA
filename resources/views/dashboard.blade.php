@@ -33,15 +33,7 @@
         <div class="row-cards">
             @foreach ($weatherData as $data)
                 @php
-                    $icon = 'cloud-sun';
-                    $condition = strtolower($data['current']['condition']['text'] ?? 'cerah');
-                    if (strpos($condition, 'hujan') !== false) {
-                        $icon = 'cloud-rain';
-                    } elseif (strpos($condition, 'cerah') !== false || strpos($condition, 'sunny') !== false) {
-                        $icon = 'sun';
-                    } elseif (strpos($condition, 'mendung') !== false) {
-                        $icon = 'cloud';
-                    }
+                    $icon = $data['icon'] ?? 'cloud-sun';
                 @endphp
                 <div class="weather-card" data-city="{{ $data['location']['name'] ?? 'Unknown City' }}" onclick="showWeatherDetail(this.dataset.city)" style="cursor: pointer;"> 
                     <div class="city-name">{{ $data['location']['name'] ?? 'Unknown City' }}</div>
@@ -55,7 +47,7 @@
                                 <i class="fas fa-{{ $icon }}"></i>
                             </div>
                             <div class="label">Kondisi</div>
-                            <div class="value" style="font-size: 1rem; color: #333;">{{ $data['current']['condition']['text'] ?? 'Data kosong' }}</div>
+                            <div class="value" style="font-size: 1rem; color: #333;">{{ $data['current']['condition']['text_id'] ?? $data['current']['condition']['text'] ?? 'Data kosong' }}</div>
                         </div>
                         
                         <div class="weather-item">

@@ -80,6 +80,9 @@ class WeatherController extends Controller
             }
 
             if ($cityItem) {
+                $cityItem['current']['is_day'] = $cityItem['current']['is_day'] ?? 1;
+                $cityItem['current']['condition']['text_id'] = $this->translateCondition($cityItem['current']['condition']['text'] ?? '');
+                $cityItem['icon'] = $this->getWeatherIcon($cityItem['current']);
                 $weatherData[] = $cityItem;
             }
         }
@@ -105,6 +108,9 @@ class WeatherController extends Controller
             if ($response->successful()) {
                 $data = $response->json();
                 $data['province'] = $province;
+                $data['current']['is_day'] = $data['current']['is_day'] ?? 1;
+                $data['current']['condition']['text_id'] = $this->translateCondition($data['current']['condition']['text'] ?? '');
+                $data['icon'] = $this->getWeatherIcon($data['current']);
 
                 // Get forecast data
                 $forecastResponse = Http::timeout(10)->get("https://api.weatherapi.com/v1/forecast.json", [
@@ -118,6 +124,15 @@ class WeatherController extends Controller
                 if ($forecastResponse->successful()) {
                     $forecastData = $forecastResponse->json();
                     $data['forecast'] = $forecastData['forecast'];
+
+                    if (isset($data['forecast']['forecastday']) && is_array($data['forecast']['forecastday'])) {
+                        foreach ($data['forecast']['forecastday'] as &$day) {
+                            $dayCondition = $day['day']['condition']['text'] ?? '';
+                            $day['day']['condition']['text_id'] = $this->translateCondition($dayCondition);
+                            $day['day']['icon'] = $this->getWeatherIcon(['condition' => ['text' => $dayCondition], 'is_day' => 1]);
+                        }
+                        unset($day);
+                    }
                 }
 
                 // Add detailed explanations
@@ -134,9 +149,82 @@ class WeatherController extends Controller
         // Fallback to mock data with explanations
         Log::info("Using mock data for {$city}");
         $data = $this->getDetailedMockWeatherData($city, $province ?? 'Indonesia');
+        $data['current']['is_day'] = $data['current']['is_day'] ?? 1;
+        $data['current']['condition']['text_id'] = $this->translateCondition($data['current']['condition']['text'] ?? '');
+        $data['icon'] = $this->getWeatherIcon($data['current']);
         $data['explanations'] = $this->getWeatherExplanations($data);
 
         return view('weather-detail', compact('data'));
+    }
+
+    private function translateCondition($condition)
+    {
+        $condition = trim(strtolower($condition));
+
+        $map = [
+            'sunny' => 'Cerah',
+            'clear' => 'Cerah',
+            'partly cloudy' => 'Berawan',
+            'cloudy' => 'Berawan',
+            'overcast' => 'Berawan',
+            'rain' => 'Hujan',
+            'light rain' => 'Hujan ringan',
+            'moderate rain' => 'Hujan sedang',
+            'heavy rain' => 'Hujan lebat',
+            'thunderstorm' => 'Badai petir',
+            'snow' => 'Salju',
+            'fog' => 'Kabut',
+            'mist' => 'Berkabut',
+            'patchy rain possible' => 'Potensi hujan',
+            'patchy snow possible' => 'Potensi salju',
+            'partly sunny' => 'Cerah berawan'
+        ];
+
+        foreach ($map as $key => $value) {
+            if (strpos($condition, $key) !== false) {
+                return $value;
+            }
+        }
+
+        if ($condition === '') {
+            return 'Tidak tersedia';
+        }
+
+        return ucfirst($condition);
+    }
+
+    private function getWeatherIcon($current)
+    {
+        $condition = strtolower($current['condition']['text'] ?? '');
+        $isDay = isset($current['is_day']) ? (int)$current['is_day'] : 1;
+
+        $isRain = strpos($condition, 'hujan') !== false || strpos($condition, 'rain') !== false || strpos($condition, 'showers') !== false || strpos($condition, 'thunder') !== false;
+        $isCloudy = strpos($condition, 'berawan') !== false || strpos($condition, 'cloudy') !== false || strpos($condition, 'mendung') !== false || strpos($condition, 'overcast') !== false;
+        $isClear = strpos($condition, 'cerah') !== false || strpos($condition, 'sunny') !== false || strpos($condition, 'clear') !== false;
+        $isThunder = strpos($condition, 'thunder') !== false || strpos($condition, 'petir') !== false;
+        $isSnow = strpos($condition, 'salju') !== false || strpos($condition, 'snow') !== false;
+
+        if ($isThunder) {
+            return 'bolt';
+        }
+
+        if ($isSnow) {
+            return 'snowflake';
+        }
+
+        if ($isRain) {
+            return $isDay ? 'cloud-rain' : 'cloud-moon';
+        }
+
+        if ($isCloudy) {
+            return $isDay ? 'cloud-sun' : 'cloud-moon';
+        }
+
+        if ($isClear) {
+            return $isDay ? 'sun' : 'moon';
+        }
+
+        return $isDay ? 'cloud-sun' : 'cloud-moon';
     }
 
     private function getWeatherExplanations($data)
@@ -234,19 +322,25 @@ class WeatherController extends Controller
         
         $rand = array_rand($conditions);
         
+        $isDay = rand(0, 1);
+        $current = [
+            'temp_c' => $temps[$rand],
+            'humidity' => rand(50, 90),
+            'condition' => ['text' => $conditions[$rand]],
+            'wind_kph' => rand(5, 20),
+            'is_day' => $isDay,
+        ];
+        $current['icon'] = $this->getWeatherIcon($current);
+
         return [
             'location' => [
                 'name' => $city,
                 'region' => $province,
                 'country' => 'Indonesia'
             ],
-            'current' => [
-                'temp_c' => $temps[$rand],
-                'humidity' => rand(50, 90),
-                'condition' => ['text' => $conditions[$rand]],
-                'wind_kph' => rand(5, 20)
-            ],
-            'province' => $province
+            'current' => $current,
+            'province' => $province,
+            'icon' => $current['icon'],
         ];
     }
 
@@ -255,6 +349,9 @@ class WeatherController extends Controller
         $baseData = $this->getMockWeatherData($city, $province);
 
         // Add detailed mock data
+        $baseData['current']['is_day'] = rand(0, 1);
+        $baseData['current']['condition']['text_id'] = $this->translateCondition($baseData['current']['condition']['text'] ?? '');
+        $baseData['current']['icon'] = $this->getWeatherIcon($baseData['current']);
         $baseData['current']['wind_dir'] = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'][rand(0, 7)];
         $baseData['current']['pressure_mb'] = rand(1000, 1020);
         $baseData['current']['vis_km'] = rand(5, 15);
@@ -273,6 +370,8 @@ class WeatherController extends Controller
         $conditions = ['Cerah', 'Berawan', 'Hujan', 'Panas Terik', 'Mendung'];
         for ($i = 0; $i < 3; $i++) {
             $date = date('Y-m-d', strtotime("+{$i} days"));
+            $dayCondition = $conditions[rand(0, 4)];
+            $forecastIcon = $this->getWeatherIcon(['condition' => ['text' => $dayCondition], 'is_day' => 1]);
             $baseData['forecast']['forecastday'][] = [
                 'date' => $date,
                 'day' => [
@@ -282,8 +381,12 @@ class WeatherController extends Controller
                     'maxwind_kph' => rand(10, 30),
                     'totalprecip_mm' => rand(0, 20),
                     'avghumidity' => rand(60, 90),
-                    'condition' => ['text' => $conditions[rand(0, 4)]],
-                    'uv' => rand(1, 11)
+                    'condition' => [
+                        'text' => $dayCondition,
+                        'text_id' => $this->translateCondition($dayCondition),
+                    ],
+                    'uv' => rand(1, 11),
+                    'icon' => $forecastIcon,
                 ],
                 'astro' => [
                     'sunrise' => '06:' . rand(10, 59) . ' AM',
