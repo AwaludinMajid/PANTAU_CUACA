@@ -21,7 +21,7 @@ Aplikasi web sederhana untuk memantau cuaca di berbagai kota menggunakan Laravel
 
 1. **Clone repository**:
    ```bash
-   git clone https://github.com/your-username/pantau-cuaca.git
+   git clone https://github.com/AwaludinMajid/pantau-cuaca.git
    cd pantau-cuaca
    ```
 
