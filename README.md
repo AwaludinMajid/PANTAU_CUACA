@@ -8,9 +8,9 @@ Aplikasi ini dirancang sebagai solusi sederhana untuk membantu pengguna mendapat
 
  �️ Screenshot Aplikasi
 
-![Screenshot Pantau Cuaca](./public/screenshots/pantau-cuaca-home.png)
+![Screenshot Pantau Cuaca](./public/image/pantau-cuaca-home.png)
 
-📌 Pastikan file screenshot sudah ditambahkan di folder `public/screenshots` dan di-commit ke repository.
+📌 Pastikan file screenshot sudah ditambahkan di folder `public/image` dan di-commit ke repository.
 
 
  �🚀 Fitur Utama
