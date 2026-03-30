@@ -53,7 +53,7 @@ class WeatherController extends Controller
 
         foreach ($this->provinces as $city => $province) {
             $cacheKey = 'weather_' . strtolower(str_replace(' ', '_', $city));
-            $cityItem = Cache::get($cacheKey);
+            $cityItem = Cache::store('file')->get($cacheKey);
 
             if (!$cityItem) {
                 try {
@@ -66,16 +66,16 @@ class WeatherController extends Controller
                     if ($response->successful()) {
                         $cityItem = $response->json();
                         $cityItem['province'] = $province;
-                        Cache::put($cacheKey, $cityItem, now()->addMinutes(10));
+                        Cache::store('file')->put($cacheKey, $cityItem, now()->addMinutes(10));
                     } else {
                         $errors[] = "Weather API failed for {$city}: HTTP " . $response->status();
                         Log::warning("Weather API failed for {$city}: " . $response->status());
-                        $cityItem = Cache::get($cacheKey, $this->getMockWeatherData($city, $province));
+                        $cityItem = Cache::store('file')->get($cacheKey, $this->getMockWeatherData($city, $province));
                     }
                 } catch (\Exception $e) {
                     $errors[] = "Weather API exception for {$city}: " . $e->getMessage();
                     Log::error("Weather API exception for {$city}: " . $e->getMessage());
-                    $cityItem = Cache::get($cacheKey, $this->getMockWeatherData($city, $province));
+                    $cityItem = Cache::store('file')->get($cacheKey, $this->getMockWeatherData($city, $province));
                 }
             }
 
