@@ -8,12 +8,15 @@ Aplikasi ini dirancang sebagai solusi sederhana untuk membantu pengguna mendapat
 
  �️ Screenshot Aplikasi
 
-![Screenshot Pantau Cuaca](./public/image/CUACA1.png)
+![Screenshot Pantau Cuaca 1](./public/image/CUACA1.png)
 
-📌 Sudah ada file screenshot di `public/image/CUACA1.png`. Jika ingin ganti, pakai nama file lain yang sama.
+![Screenshot Pantau Cuaca 2](./public/image/CUACA2.png)
 
+📌 Terdapat dua file screenshot di `public/image/`:
+- `CUACA1.png`
+- `CUACA2.png`
 
- �🚀 Fitur Utama
+🚀 Fitur Utama
 
 * 🌍 Menampilkan cuaca di beberapa kota (ibu kota provinsi)
 * 🌡️ Informasi suhu secara real-time
