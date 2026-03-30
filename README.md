@@ -1,94 +1,204 @@
-# PANTAU CUACA
+ 🌦️ PANTAU CUACA
 
-Aplikasi web sederhana untuk memantau cuaca di berbagai kota menggunakan Laravel dan API cuaca eksternal.
+ 📌 Deskripsi
+Pantau Cuaca adalah aplikasi web berbasis Laravel yang digunakan untuk memantau kondisi cuaca secara real-time di berbagai ibu kota provinsi di Indonesia. Aplikasi ini memanfaatkan layanan API cuaca eksternal untuk menampilkan informasi terkini seperti suhu, kondisi cuaca, dan kelembaban udara.
 
-## Fitur
+Aplikasi ini dirancang sebagai solusi sederhana untuk membantu pengguna mendapatkan informasi cuaca secara cepat, akurat, dan mudah diakses melalui web.
 
-- 🏠 Halaman utama dengan informasi cuaca umum
-- 📊 Dashboard untuk monitoring cuaca
-- 🌤️ Detail cuaca per kota (Jakarta, dll.)
-- 🔄 Update cuaca real-time menggunakan API
-- 📱 Desain responsif dengan Bootstrap
 
-## Teknologi yang Digunakan
+ �️ Screenshot Aplikasi
 
-- **Backend**: Laravel 11.x
-- **Frontend**: Template Blade, Bootstrap, Vite
-- **Database**: SQLite (default)
-- **API**: Weather API (memerlukan API key)
+![Screenshot Pantau Cuaca](./public/screenshots/pantau-cuaca-home.png)
 
-## Instalasi
+📌 Pastikan file screenshot sudah ditambahkan di folder `public/screenshots` dan di-commit ke repository.
 
-1. **Clone repository**:
-   ```bash
-   git clone https://github.com/AwaludinMajid/pantau-cuaca.git
-   cd pantau-cuaca
-   ```
 
-2. **Install dependensi**:
-   ```bash
-   composer install
-   npm install
-   ```
+ �🚀 Fitur Utama
 
-3. **Setup environment**:
-   ```bash
-   cp .env.example .env
-   php artisan key:generate
-   ```
+* 🌍 Menampilkan cuaca di beberapa kota (ibu kota provinsi)
+* 🌡️ Informasi suhu secara real-time
+* 🌤️ Kondisi cuaca (cerah, hujan, berawan, dll.)
+* 💧 Kelembaban udara
+* 🔄 Update data otomatis dari API cuaca
+* 📱 Tampilan responsif (mobile-friendly)
 
-4. **Konfigurasi API Key**:
-   - Daftar di [Weather API Provider](https://example.com) untuk mendapatkan API key
-   - Masukkan API key ke `.env`:
-     ```
-     WEATHER_API_KEY=your_api_key_here
-     ```
 
-5. **Setup database** (opsional, default SQLite):
-   ```bash
-   php artisan migrate
-   ```
+ 🛠️ Teknologi yang Digunakan
 
-6. **Build assets**:
-   ```bash
-   npm run build
-   # atau untuk development:
-   npm run dev
-   ```
+* **Backend**: Laravel 11
+* **Frontend**: Blade Template, Bootstrap, Vite
+* **HTTP Client**: Laravel HTTP (API Integration)
+* **Database**: SQLite (default, opsional)
+* **API Cuaca**: WeatherAPI
 
-7. **Jalankan aplikasi**:
-   ```bash
-   php artisan serve
-   ```
 
-   Akses di: `http://localhost:8000`
+ ⚙️ Instalasi
 
-## Testing
+ 1. Clone Repository
 
-Jalankan test dengan:
 ```bash
-php artisan test
+git clone https://github.com/AwaludinMajid/pantau-cuaca.git
+cd pantau-cuaca
+
+
+
+ 2. Install Dependency
+
+```bash
+composer install
+npm install
+
+
+
+ 3. Setup Environment
+
+```bash
+cp .env.example .env
+php artisan key:generate
+
+
+
+ 4. Konfigurasi API Key
+
+Daftar di:
+👉 [https://www.weatherapi.com/](https://www.weatherapi.com/)
+
+Lalu masukkan API key ke file `.env`:
+
+```env
+WEATHER_API_KEY=your_api_key_here
 ```
 
-## Struktur Proyek
 
-- `app/Http/Controllers/WeatherController.php` - Controller untuk logika cuaca
-- `resources/views/` - Template Blade
-- `routes/web.php` - Routing aplikasi
-- `config/` - Konfigurasi Laravel
 
-## Kontribusi
+ 5. Konfigurasi Database (Opsional)
 
-Silakan fork dan berkontribusi! 🚀
+```bash
+php artisan migrate
 
-## Lisensi
 
-Proyek ini adalah software open-source yang dilisensikan di bawah [MIT license](https://opensource.org/licenses/MIT).
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-## Security Vulnerabilities
+ 6. Build Frontend
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+npm run build
+
+
+Untuk development:
+
+```bash
+npm run dev
+
+
+---
+
+### 7. Jalankan Aplikasi
+
+#### 🚀 **Opsi 1: Server Stabil (Direkomendasikan)**
+```bash
+# Menggunakan PHP built-in server (lebih stabil)
+php -S 127.0.0.1:8000 -t public
+```
+
+#### 🚀 **Opsi 2: Laravel Artisan (Development)**
+```bash
+php artisan serve
+```
+
+#### 🚀 **Opsi 3: Auto-Restart Server (Windows)**
+```bash
+# Jalankan script PowerShell untuk auto-restart
+.\start_server.ps1
+```
+Atau klik file `start_server.bat`
+
+#### 🚀 **Opsi 4: Menggunakan Web Server (Production)**
+- **Apache/Nginx**: Konfigurasi virtual host
+- **Docker**: Gunakan Laravel Sail
+- **Laragon**: Import project ke Laragon
+
+---
+
+### 📡 Akses Aplikasi
+Buka browser dan akses:
+```
+http://127.0.0.1:8000
+```
+
+### 🔧 Troubleshooting Server
+
+#### ❌ "Can't reach this page" / Server sering mati?
+**Solusi:**
+
+1. **Gunakan PHP Built-in Server:**
+   ```bash
+   php -S 127.0.0.1:8000 -t public
+   ```
+
+2. **Auto-Restart Script:**
+   Jalankan `start_server.ps1` untuk server yang auto-restart saat crash
+
+3. **Cek Port Conflict:**
+   ```bash
+   netstat -ano | findstr :8000
+   ```
+
+4. **Increase Memory Limit:**
+   Edit `php.ini`:
+   ```ini
+   memory_limit = 512M
+   max_execution_time = 300
+   ```
+
+5. **Gunakan Web Server:**
+   - **Laragon**: Import project
+   - **XAMPP**: Konfigurasi Apache
+   - **Docker**: `composer require laravel/sail`
+
+#### ⚡ Tips Optimasi:
+- Clear cache: `php artisan view:clear`
+- Restart server setiap perubahan signifikan
+- Monitor memory usage saat development
+
+
+
+
+🧪 Testing
+
+bash
+php artisan test
+
+
+
+
+📂 Struktur Proyek
+
+
+app/
+ └── Http/
+     └── Controllers/
+         └── WeatherController.php
+
+resources/
+ └── views/
+     └── dashboard.blade.php
+
+routes/
+ └── web.php
+```
+
+
+
+📈 Pengembangan Selanjutnya
+
+* 🌍 Menambahkan seluruh ibu kota provinsi di Indonesia
+* 🔍 Fitur pencarian kota
+* 📊 Grafik perubahan cuaca
+* 🔄 Auto refresh tanpa reload (AJAX)
+* 🌐 Integrasi API BMKG
+
+
+
 
 
