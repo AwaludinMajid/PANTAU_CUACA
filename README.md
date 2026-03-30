@@ -8,12 +8,12 @@ Aplikasi web sederhana untuk memantau cuaca di berbagai kota menggunakan Laravel
 - 📊 Dashboard untuk monitoring cuaca
 - 🌤️ Detail cuaca per kota (Jakarta, dll.)
 - 🔄 Update cuaca real-time menggunakan API
-- 📱 Responsive design dengan Bootstrap
+- 📱 Desain responsif dengan Bootstrap
 
-## Tech Stack
+## Teknologi yang Digunakan
 
 - **Backend**: Laravel 11.x
-- **Frontend**: Blade Templates, Bootstrap, Vite
+- **Frontend**: Template Blade, Bootstrap, Vite
 - **Database**: SQLite (default)
 - **API**: Weather API (memerlukan API key)
 
@@ -25,7 +25,7 @@ Aplikasi web sederhana untuk memantau cuaca di berbagai kota menggunakan Laravel
    cd pantau-cuaca
    ```
 
-2. **Install dependencies**:
+2. **Install dependensi**:
    ```bash
    composer install
    npm install
@@ -79,11 +79,11 @@ php artisan test
 
 ## Kontribusi
 
-Feel free to fork dan contribute! 🚀
+Silakan fork dan berkontribusi! 🚀
 
 ## Lisensi
 
-This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Proyek ini adalah software open-source yang dilisensikan di bawah [MIT license](https://opensource.org/licenses/MIT).
 
 In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
@@ -91,6 +91,4 @@ In order to ensure that the Laravel community is welcoming to all, please review
 
 If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
