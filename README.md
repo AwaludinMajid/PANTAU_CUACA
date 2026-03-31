@@ -7,6 +7,12 @@ Aplikasi ini dirancang sebagai solusi sederhana untuk membantu pengguna mendapat
 
 ---
 
+🌐 Production URL
+
+Aplikasi ini telah di-deploy dan dapat diakses di: [pantaucuaca-production.up.railway.app](https://pantaucuaca-production.up.railway.app)
+
+---
+
 🖼️ Screenshot Aplikasi
 
 ![Screenshot Pantau Cuaca 1](./public/image/CUACA1.png)
